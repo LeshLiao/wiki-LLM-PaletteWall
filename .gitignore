@@ -1,0 +1,49 @@
+# ---------------------------------------------------------------
+# Raw sources
+# Cloned source repos under raw/ are inputs for ingestion only.
+# They are not part of this wiki repo (and have their own .git).
+# Keep raw/SOURCES.md and raw/.gitkeep tracked.
+# ---------------------------------------------------------------
+raw/PaletteWallAndroid/
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Claude Code local state
+.claude/settings.local.json
+.claude/*.local.*
+
+# Python (ingestion scripts, if any)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node (tooling, if any)
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log*
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build / temp output
+build/
+out/
+tmp/
+*.log
