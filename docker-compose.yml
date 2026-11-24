@@ -1,0 +1,31 @@
+# wiki MCP（唯讀）。用法：docker compose up -d --build
+#
+# 容器怎麼讀到本機 wiki：下面的 bind mount 把這個 repo 的 ./wiki 以唯讀掛進容器的 /wiki。
+# 本機 git pull / ingest 後容器立刻看到新內容，不需要 rebuild 或 restart。
+#
+# 對外：不開 host port，而是加入 english-tutor 的 docker network，由它的 caddy 以 /wiki-mcp* 反向代理過來。
+# 本機除錯可把 ports 那兩行解開，用 http://127.0.0.1:8002/health 看。
+services:
+  wiki-mcp:
+    build: ./mcp-server
+    environment:
+      API_KEY: ${API_KEY}
+      MCP_TRANSPORT: http
+      WIKI_ROOT: /wiki
+    volumes:
+      - ./wiki:/wiki:ro
+    # ports:
+    #   - "127.0.0.1:8002:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - english-tutor
+
+networks:
+  english-tutor:
+    external: true
+    name: english-tutor_default
